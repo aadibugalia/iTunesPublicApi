@@ -10,6 +10,7 @@ import com.adityabugalia.itunespublicapi.api.ItunesServiceInterface
 import com.adityabugalia.itunespublicapi.models.GenericResultModel
 import com.adityabugalia.itunespublicapi.models.ResultModel
 import com.adityabugalia.itunespublicapi.models.SearchResultModel
+import com.adityabugalia.itunespublicapi.utils.ValidationUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +27,7 @@ class MainActivityViewModel : ViewModel() {
     fun resultListInitialised(): Boolean = ::resultList.isInitialized
 
     val FILTER_QUERY_DELAY: Long = 250
-    val FILTER_QUERY_TEXT_MIN_LENGTH = 5
+
     private var timer: Timer? = null
 
     fun createSearchQueryListener(): SearchView.OnQueryTextListener {
@@ -51,7 +52,7 @@ class MainActivityViewModel : ViewModel() {
     }
 
     private fun executeSearchFilter(newText: String) {
-        if (newText.length >= FILTER_QUERY_TEXT_MIN_LENGTH) {
+        if (ValidationUtils.validateSearchInput(newText)) {
             //call API
             callAPI(newText)
         }
