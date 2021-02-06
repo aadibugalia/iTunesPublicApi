@@ -1,15 +1,19 @@
 package com.adityabugalia.itunespublicapi.viewmodels
 
 import android.util.Log
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.adityabugalia.itunespublicapi.api.APIBuilder
 import com.adityabugalia.itunespublicapi.api.ItunesServiceInterface
+import com.adityabugalia.itunespublicapi.models.GenericResultModel
 import com.adityabugalia.itunespublicapi.models.ResultModel
+import com.adityabugalia.itunespublicapi.models.SearchResultModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.util.*
 
 class MainActivityViewModel : ViewModel() {
@@ -52,15 +56,17 @@ class MainActivityViewModel : ViewModel() {
             callAPI(newText)
         }
     }
+    fun onRecyclerViewItemClicked(model: SearchResultModel){
+        resultLiveData.postValue(model)
 
+    }
     private fun callAPI(queryText: String) {
         iTunesService = APIBuilder.getRetrofit()!!.create(ItunesServiceInterface::class.java)
         iTunesService.getSearchResults(queryText, "25")
             ?.enqueue(object : Callback<ResultModel?> {
 
                 override fun onFailure(call: Call<ResultModel?>, t: Throwable) {
-                    TODO("Not yet implemented")
-                    Log.d("", "")
+                    resultLiveData.postValue(GenericResultModel(false,"no response recieved"))
                 }
 
                 override fun onResponse(
@@ -71,6 +77,7 @@ class MainActivityViewModel : ViewModel() {
                         resultList = response.body()!!
                         resultLiveData.postValue(response.body())
                     } else {
+                        resultLiveData.postValue(GenericResultModel(false,"request failed."))
 
                     }
                 }

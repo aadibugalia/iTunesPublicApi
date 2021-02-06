@@ -22,4 +22,16 @@ data class SearchResultModel(
     @SerializedName("currency")
     @Expose
     var currency: String
-)
+){
+
+
+    fun getAlbumArtWork():String{
+        return albumArtworkUrl30
+    }
+    fun getAName():String{
+        return albumName
+    }
+    fun getAlbumReleaseDate():String{
+        return releaseDate
+    }
+}

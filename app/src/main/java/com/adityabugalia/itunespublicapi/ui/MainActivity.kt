@@ -1,7 +1,7 @@
 package com.adityabugalia.itunespublicapi.ui
 
-import android.content.DialogInterface
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adityabugalia.itunespublicapi.R
 import com.adityabugalia.itunespublicapi.adapters.MainListDisplayAdapter
+import com.adityabugalia.itunespublicapi.models.GenericResultModel
 import com.adityabugalia.itunespublicapi.models.ResultModel
 import com.adityabugalia.itunespublicapi.models.SearchResultModel
 import com.adityabugalia.itunespublicapi.viewmodels.MainActivityViewModel
@@ -37,14 +38,21 @@ class MainActivity : AppCompatActivity(), UiNotifications {
         viewModel.resultLiveData.observe(
             this,
             Observer { result ->
-                adapter.notifyDataSetChanged()
-                when (result is ResultModel) {
 
-
+                when (result) {
+                    is ResultModel -> {
+                        adapter.reloadData()
+                    }
+                    is SearchResultModel -> {
+                        showDetailsDialog(result)
+                    }
+                    is GenericResultModel -> {
+                        showToast(result.resultDescription)
+                    }
                 }
             }
         )
-        adapter = MainListDisplayAdapter(this, viewModel, this)
+        adapter = MainListDisplayAdapter(viewModel, this)
         val mLayoutManager = LinearLayoutManager(applicationContext)
 
         mainDisplayRV.adapter = adapter
@@ -70,7 +78,12 @@ class MainActivity : AppCompatActivity(), UiNotifications {
             .setOnDismissListener({ }).show()
     }
 
-    override fun notifyUI(searchResultModel: SearchResultModel) {
-        showDetailsDialog(searchResultModel)
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
+
+    override fun notifyUI(searchResultModel: SearchResultModel) {
+
+    }
+
 }
