@@ -1,10 +1,25 @@
 package com.adityabugalia.itunespublicapi.viewmodels
 
+import android.util.Log
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.adityabugalia.itunespublicapi.api.APIBuilder
+import com.adityabugalia.itunespublicapi.api.ItunesServiceInterface
+import com.adityabugalia.itunespublicapi.models.ResultModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class MainActivityViewModel : ViewModel() {
+
+    var resultLiveData: MutableLiveData<Any> =
+        MutableLiveData()
+        private set
+    lateinit var resultList: ResultModel
+    private lateinit var iTunesService: ItunesServiceInterface
+    fun resultListInitialised(): Boolean = ::resultList.isInitialized
 
     val FILTER_QUERY_DELAY: Long = 250
     val FILTER_QUERY_TEXT_MIN_LENGTH = 5
@@ -33,7 +48,34 @@ class MainActivityViewModel : ViewModel() {
 
     private fun executeSearchFilter(newText: String) {
         if (newText.length >= FILTER_QUERY_TEXT_MIN_LENGTH) {
-          //call API
+            //call API
+            callAPI(newText)
         }
     }
+
+    private fun callAPI(queryText: String) {
+        iTunesService = APIBuilder.getRetrofit()!!.create(ItunesServiceInterface::class.java)
+        iTunesService.getSearchResults(queryText, "25")
+            ?.enqueue(object : Callback<ResultModel?> {
+
+                override fun onFailure(call: Call<ResultModel?>, t: Throwable) {
+                    TODO("Not yet implemented")
+                    Log.d("", "")
+                }
+
+                override fun onResponse(
+                    call: Call<ResultModel?>,
+                    response: Response<ResultModel?>
+                ) {
+                    if (response?.isSuccessful!!) {
+                        resultList = response.body()!!
+                        resultLiveData.postValue(response.body())
+                    } else {
+
+                    }
+                }
+
+            })
+    }
+
 }

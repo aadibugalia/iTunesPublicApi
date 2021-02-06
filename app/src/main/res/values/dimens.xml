@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <margin_8>8dp</margin_8>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="heading_textsize">16sp</dimen>
+    <dimen name="subheading_textsize">12sp</dimen>
 
 </resources>

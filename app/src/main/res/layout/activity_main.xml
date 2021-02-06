@@ -19,9 +19,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainDisplayRV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/searchAPiSearchBox"
         app:layout_constraintTop_toBottomOf="@+id/searchAPiSearchBox">
 
-    </androidx.recyclerview.widget.RecyclerView>
+</androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

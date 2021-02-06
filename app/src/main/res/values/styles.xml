@@ -7,4 +7,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="heading_text_style" parent="AppTheme">
+        <item name="android:textSize">@dimen/heading_textsize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="subheading_text_style" parent="AppTheme">
+        <item name="android:textSize">@dimen/subheading_textsize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 </resources>

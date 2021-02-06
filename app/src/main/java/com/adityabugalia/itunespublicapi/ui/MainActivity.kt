@@ -1,31 +1,55 @@
 package com.adityabugalia.itunespublicapi.ui
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.DialogInterface
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adityabugalia.itunespublicapi.R
+import com.adityabugalia.itunespublicapi.adapters.MainListDisplayAdapter
+import com.adityabugalia.itunespublicapi.models.ResultModel
+import com.adityabugalia.itunespublicapi.models.SearchResultModel
 import com.adityabugalia.itunespublicapi.viewmodels.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), UiNotifications {
 
     private lateinit var viewModel: MainActivityViewModel
+    private lateinit var adapter: MainListDisplayAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
 
     override fun onResume() {
         super.onResume()
-
+        initViewModel()
         searchAPiSearchBox?.setOnQueryTextListener(viewModel.createSearchQueryListener())
+
     }
 
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        viewModel.resultLiveData.observe(
+            this,
+            Observer { result ->
+                adapter.notifyDataSetChanged()
+                when (result is ResultModel) {
 
+
+                }
+            }
+        )
+        adapter = MainListDisplayAdapter(this, viewModel, this)
+        val mLayoutManager = LinearLayoutManager(applicationContext)
+
+        mainDisplayRV.adapter = adapter
+        mainDisplayRV.setLayoutManager(mLayoutManager)
+    }
 
 
     private fun clearSearchView() {
@@ -36,5 +60,17 @@ class MainActivity : AppCompatActivity() {
             it.isIconified
             it.setIconifiedByDefault(false)
         }
+    }
+
+    private fun showDetailsDialog(searchResultModel: SearchResultModel) {
+        AlertDialog.Builder(this)
+            .setTitle(searchResultModel.albumName)
+
+            .setPositiveButton("OK", null)
+            .setOnDismissListener({ }).show()
+    }
+
+    override fun notifyUI(searchResultModel: SearchResultModel) {
+        showDetailsDialog(searchResultModel)
     }
 }
