@@ -55,19 +55,25 @@ class MainActivityViewModel : ViewModel() {
         if (ValidationUtils.validateSearchInput(newText)) {
             //call API
             callAPI(newText)
+        } else if (newText.length == 0) {
+            resultList.items.clear()
+            resultLiveData.postValue(GenericResultModel(false, ""))
+
         }
     }
-    fun onRecyclerViewItemClicked(model: SearchResultModel){
+
+    fun onRecyclerViewItemClicked(model: SearchResultModel) {
         resultLiveData.postValue(model)
 
     }
+
     private fun callAPI(queryText: String) {
         iTunesService = APIBuilder.getRetrofit()!!.create(ItunesServiceInterface::class.java)
         iTunesService.getSearchResults(queryText, "25")
             ?.enqueue(object : Callback<ResultModel?> {
 
                 override fun onFailure(call: Call<ResultModel?>, t: Throwable) {
-                    resultLiveData.postValue(GenericResultModel(false,"no response recieved"))
+                    resultLiveData.postValue(GenericResultModel(false, "no response recieved"))
                 }
 
                 override fun onResponse(
@@ -78,7 +84,7 @@ class MainActivityViewModel : ViewModel() {
                         resultList = response.body()!!
                         resultLiveData.postValue(response.body())
                     } else {
-                        resultLiveData.postValue(GenericResultModel(false,"request failed."))
+                        resultLiveData.postValue(GenericResultModel(false, "request failed."))
 
                     }
                 }

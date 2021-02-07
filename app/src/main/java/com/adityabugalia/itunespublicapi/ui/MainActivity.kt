@@ -18,7 +18,7 @@ import com.adityabugalia.itunespublicapi.models.SearchResultModel
 import com.adityabugalia.itunespublicapi.viewmodels.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), UiNotifications {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var adapter: MainListDisplayAdapter
@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity(), UiNotifications {
                         showDetailsDialog(result)
                     }
                     is GenericResultModel -> {
+                        adapter.reloadData()
+                        if(result.resultDescription.length>0)
                         showToast(result.resultDescription)
                     }
 
@@ -78,17 +80,17 @@ class MainActivity : AppCompatActivity(), UiNotifications {
     private fun showDetailsDialog(searchResultModel: SearchResultModel) {
         AlertDialog.Builder(this)
             .setTitle(searchResultModel.albumName)
-
+            .setMessage("Primary Genre Name: "+searchResultModel.primaryGenreName+"\n"+
+            "Collection Price: "+searchResultModel.collectionPrice+"\n"+
+            "Currency: "+ searchResultModel.currency+"\n"+
+            "Copyright: "+searchResultModel.country)
+            .setCancelable(false)
             .setPositiveButton("OK", null)
             .setOnDismissListener({ }).show()
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-
-    override fun notifyUI(searchResultModel: SearchResultModel) {
-
     }
 
     fun hideKeyboard() {

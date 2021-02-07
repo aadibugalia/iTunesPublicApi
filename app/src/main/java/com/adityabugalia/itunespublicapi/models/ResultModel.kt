@@ -10,5 +10,5 @@ data class ResultModel(
 
     @SerializedName("results")
     @Expose
-    var items : List<SearchResultModel>
+    var items : MutableList<SearchResultModel>
 )

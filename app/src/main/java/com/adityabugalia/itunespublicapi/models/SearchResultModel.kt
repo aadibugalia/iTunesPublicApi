@@ -21,17 +21,22 @@ data class SearchResultModel(
     var collectionPrice: String,
     @SerializedName("currency")
     @Expose
-    var currency: String
-){
+    var currency: String,
+    @SerializedName("country")
+    @Expose
+    var country: String
+) {
 
 
-    fun getAlbumArtWork():String{
+    fun getAlbumArtWork(): String {
         return albumArtworkUrl30
     }
-    fun getAName():String{
+
+    fun getAName(): String {
         return albumName
     }
-    fun getAlbumReleaseDate():String{
+
+    fun getAlbumReleaseDate(): String {
         return releaseDate
     }
 }
