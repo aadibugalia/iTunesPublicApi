@@ -1,6 +1,9 @@
 package com.adityabugalia.itunespublicapi.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -49,7 +52,9 @@ class MainActivity : AppCompatActivity(), UiNotifications {
                     is GenericResultModel -> {
                         showToast(result.resultDescription)
                     }
+
                 }
+                hideKeyboard()
             }
         )
         adapter = MainListDisplayAdapter(viewModel, this)
@@ -84,6 +89,11 @@ class MainActivity : AppCompatActivity(), UiNotifications {
 
     override fun notifyUI(searchResultModel: SearchResultModel) {
 
+    }
+
+    fun hideKeyboard() {
+        val imm = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(window.decorView.getRootView().windowToken, 0)
     }
 
 }

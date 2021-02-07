@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">iTunesPublicApi</string>
+    <string name="search_query_hint">Search iTunes</string>
 </resources>
