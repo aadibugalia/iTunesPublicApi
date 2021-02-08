@@ -80,9 +80,14 @@ class MainActivityViewModel : ViewModel() {
                     call: Call<ResultModel?>,
                     response: Response<ResultModel?>
                 ) {
-                    if (response?.isSuccessful!!) {
-                        resultList = response.body()!!
-                        resultLiveData.postValue(response.body())
+                    if (response?.isSuccessful) {
+                        try {
+                            resultList = response.body()!!
+                            resultLiveData.postValue(response.body())
+                        } catch (e: Exception) {
+                            resultLiveData.postValue("Some Error Occured: Please Try Again Later.")
+                        }
+
                     } else {
                         resultLiveData.postValue(GenericResultModel(false, "request failed."))
 
