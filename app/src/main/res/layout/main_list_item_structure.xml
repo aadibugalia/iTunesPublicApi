@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="searchResultModel"
+            type="com.adityabugalia.itunespublicapi.models.SearchResultModel" />
+        <variable
+            name="viewModel"
+            type="com.adityabugalia.itunespublicapi.viewmodels.MainActivityViewModel" />
+
+    </data>
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/itemMainListCL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.onRecyclerViewItemClicked(searchResultModel)}">
+
+
+            <ImageView
+                android:id="@+id/albumArtIV"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="@dimen/margin_8"
+                android:clickable="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImageFromUrl="@{searchResultModel.albumArtworkUrl30}" />
+
+            <TextView
+                android:id="@+id/albumNameTV"
+                style="@style/heading_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_8"
+                android:ellipsize="end"
+                android:clickable="false"
+                android:text="@string/app_name"
+                app:layout_constraintLeft_toRightOf="@id/albumArtIV"
+                app:layout_constraintTop_toTopOf="@+id/albumArtIV"
+                app:setTextViewText="@{searchResultModel.albumName}" />
+
+            <TextView
+                android:id="@+id/albumReleaseDateTV"
+                style="@style/subheading_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:layout_marginLeft="@dimen/margin_8"
+                android:text="@string/app_name"
+                app:layout_constraintLeft_toRightOf="@id/albumArtIV"
+                app:layout_constraintTop_toBottomOf="@+id/albumNameTV"
+                app:setTextViewText="@{searchResultModel.releaseDate}"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
